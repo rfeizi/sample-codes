@@ -1,0 +1,303 @@
+﻿-- phpMyAdmin SQL Dump
+-- version 3.5.1
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Aug 22, 2012 at 09:02 PM
+-- Server version: 5.5.24-log
+-- PHP Version: 5.4.3
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+CREATE DATABASE IF NOT EXISTS `patentsys`;
+
+USE `patentsys`;
+
+--
+-- Database: `patentsys`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `attachment`
+--
+
+CREATE TABLE IF NOT EXISTS `attachment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `filename` varchar(200) COLLATE utf8_bin NOT NULL,
+  `attachtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `invention_file_id` int(11) DEFAULT NULL,
+  `extension` varchar(10) COLLATE utf8_bin DEFAULT NULL,
+  `size` int(11) DEFAULT NULL,
+  `status` decimal(10,0) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `invention_file_id` (`invention_file_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=38 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `company`
+--
+
+CREATE TABLE IF NOT EXISTS `company` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) COLLATE utf8_bin NOT NULL,
+  `address` varchar(500) COLLATE utf8_bin DEFAULT NULL,
+  `phoneNumber` bigint(20) DEFAULT NULL,
+  `introduce_file_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `introduce_file_id` (`introduce_file_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `expertise_domain`
+--
+
+CREATE TABLE IF NOT EXISTS `expertise_domain` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=10 ;
+
+--
+-- Dumping data for table `expertise_domain`
+--
+
+INSERT INTO `expertise_domain` (`id`, `name`) VALUES
+(8, 'برق'),
+(9, 'کامپیوتر');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `expert_in_domain`
+--
+
+CREATE TABLE IF NOT EXISTS `expert_in_domain` (
+  `expert_id` int(11) NOT NULL,
+  `domain_id` int(11) NOT NULL,
+  PRIMARY KEY (`expert_id`,`domain_id`),
+  KEY `expert_id` (`expert_id`),
+  KEY `domain_id` (`domain_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invention`
+--
+
+CREATE TABLE IF NOT EXISTS `invention` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invention_file_id` int(11) NOT NULL,
+  `price` int(11) DEFAULT NULL,
+  `status` decimal(10,0) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `invention_file_id_2` (`invention_file_id`),
+  KEY `invention_file_id` (`invention_file_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=45 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invention_file`
+--
+
+CREATE TABLE IF NOT EXISTS `invention_file` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(500) COLLATE utf8_bin NOT NULL,
+  `exp_domain_id` int(11) DEFAULT NULL,
+  `new_exp_domain_request_id` int(11) DEFAULT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  `creation_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `related_invention_id` int(11) DEFAULT NULL,
+  `relation_type` enum(' ''continuation'' , ''improve'',  ''part''') COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `creator_id` (`creator_id`),
+  KEY `related_invention_id` (`related_invention_id`),
+  KEY `exp_domain_id` (`exp_domain_id`),
+  KEY `new_exp_domain_request_id` (`new_exp_domain_request_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=52 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invention_file_assesment`
+--
+
+CREATE TABLE IF NOT EXISTS `invention_file_assesment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invention_id` int(11) NOT NULL,
+  `expert_id` int(11) NOT NULL,
+  `assign_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `finish_time` timestamp NULL DEFAULT NULL,
+  `originality` tinyint(1) DEFAULT NULL,
+  `abstract_completeness` tinyint(1) DEFAULT NULL,
+  `doc_completeness` tinyint(1) DEFAULT NULL,
+  `indictment_consistency` tinyint(1) DEFAULT NULL,
+  `representation_check` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `expert_id` (`expert_id`),
+  KEY `invention_id` (`invention_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=3 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invention_file_edition`
+--
+
+CREATE TABLE IF NOT EXISTS `invention_file_edition` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invention_file_id` int(11) NOT NULL,
+  `editor_id` int(11) DEFAULT NULL,
+  `edition_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `edition_explan` text COLLATE utf8_bin NOT NULL,
+  `abstract` text COLLATE utf8_bin NOT NULL,
+  `history` text COLLATE utf8_bin NOT NULL,
+  `indictment` text COLLATE utf8_bin NOT NULL,
+  `explan` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `invention_file_id` (`invention_file_id`),
+  KEY `editor_id` (`editor_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=212 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inventor_collaboration`
+--
+
+CREATE TABLE IF NOT EXISTS `inventor_collaboration` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invention_file_id` int(11) NOT NULL,
+  `inventor_id` int(11) NOT NULL,
+  `financial_share` double NOT NULL,
+  `spiritual_share` double NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `invention_file_id` (`invention_file_id`),
+  KEY `inventor_id` (`inventor_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=56 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `new_expertise_domain_request`
+--
+
+CREATE TABLE IF NOT EXISTS `new_expertise_domain_request` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invention_file_id` int(11) NOT NULL,
+  `domain_name` varchar(100) COLLATE utf8_bin NOT NULL,
+  `status` decimal(10,0) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `invention_file_id_2` (`invention_file_id`),
+  KEY `id` (`id`),
+  KEY `invention_file_id` (`invention_file_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=3 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE IF NOT EXISTS `user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) COLLATE utf8_bin NOT NULL,
+  `password` varchar(200) COLLATE utf8_bin NOT NULL,
+  `firstname` varchar(100) COLLATE utf8_bin NOT NULL,
+  `lastname` varchar(100) COLLATE utf8_bin NOT NULL,
+  `phoneNumber` bigint(20) NOT NULL,
+  `email` varchar(200) COLLATE utf8_bin DEFAULT NULL,
+  `discriminator` varchar(2) COLLATE utf8_bin NOT NULL,
+  `company_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `username` (`username`),
+  KEY `company_id` (`company_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=36 ;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`user_id`, `username`, `password`, `firstname`, `lastname`, `phoneNumber`, `email`, `discriminator`, `company_id`) VALUES
+(35, 'admin', '!#/)zW¥§C‰JJ€أ', 'رقیه', 'فیضی', 0, NULL, 'M', NULL);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `attachment`
+--
+ALTER TABLE `attachment`
+  ADD CONSTRAINT `attachment_ibfk_1` FOREIGN KEY (`invention_file_id`) REFERENCES `invention_file` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `company`
+--
+ALTER TABLE `company`
+  ADD CONSTRAINT `company_ibfk_1` FOREIGN KEY (`introduce_file_id`) REFERENCES `attachment` (`id`);
+
+--
+-- Constraints for table `expert_in_domain`
+--
+ALTER TABLE `expert_in_domain`
+  ADD CONSTRAINT `expert_in_domain_ibfk_2` FOREIGN KEY (`domain_id`) REFERENCES `expertise_domain` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `expert_in_domain_ibfk_5` FOREIGN KEY (`expert_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `invention`
+--
+ALTER TABLE `invention`
+  ADD CONSTRAINT `invention_ibfk_2` FOREIGN KEY (`invention_file_id`) REFERENCES `invention_file` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `invention_file`
+--
+ALTER TABLE `invention_file`
+  ADD CONSTRAINT `invention_file_ibfk_10` FOREIGN KEY (`new_exp_domain_request_id`) REFERENCES `new_expertise_domain_request` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `invention_file_ibfk_11` FOREIGN KEY (`creator_id`) REFERENCES `user` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `invention_file_ibfk_12` FOREIGN KEY (`related_invention_id`) REFERENCES `invention` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `invention_file_ibfk_13` FOREIGN KEY (`exp_domain_id`) REFERENCES `expertise_domain` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `invention_file_assesment`
+--
+ALTER TABLE `invention_file_assesment`
+  ADD CONSTRAINT `invention_file_assesment_ibfk_2` FOREIGN KEY (`invention_id`) REFERENCES `invention` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `invention_file_assesment_ibfk_3` FOREIGN KEY (`expert_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `invention_file_edition`
+--
+ALTER TABLE `invention_file_edition`
+  ADD CONSTRAINT `invention_file_edition_ibfk_1` FOREIGN KEY (`invention_file_id`) REFERENCES `invention_file` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `invention_file_edition_ibfk_4` FOREIGN KEY (`editor_id`) REFERENCES `user` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `inventor_collaboration`
+--
+ALTER TABLE `inventor_collaboration`
+  ADD CONSTRAINT `inventor_collaboration_ibfk_4` FOREIGN KEY (`invention_file_id`) REFERENCES `invention_file` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `inventor_collaboration_ibfk_5` FOREIGN KEY (`inventor_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `new_expertise_domain_request`
+--
+ALTER TABLE `new_expertise_domain_request`
+  ADD CONSTRAINT `new_expertise_domain_request_ibfk_2` FOREIGN KEY (`invention_file_id`) REFERENCES `invention_file` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
