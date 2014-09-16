@@ -1,0 +1,47 @@
+function [ ] = expl( k,Q )
+%Data=read_data_iris();
+Data=read_data_glass();
+
+
+%definitions
+ size_of_data=size(Data,1);
+ colomn_n= size_of_data;
+ Neighborhoods=zeros(k,colomn_n);
+ Length=zeros(1,colomn_n);
+ colomns=size(Data,2);
+ count=1;
+ flag=0;
+ remainingQ=Q;
+ temp_Data=zeros(size_of_data,colomns-2);
+ 
+ %preprocessing
+ 
+ temp_Data=Data(:,(2:(colomns-1)));
+ randomPointID = randsample(size_of_data,1) ;
+ usedindexes=zeros(1,size_of_data);
+ usedindexes_size=1;
+ usedindexes(1,1)=randomPointID;
+ Neighborhoods(1,1)=randomPointID;
+ Length(1,1)=1;
+ 
+  
+ while remainingQ>0 && flag==0
+
+  pointID= find_farthest_point(Data,usedindexes,usedindexes_size);
+  [count Neighborhoods  remainingQ  Length mustlinks cantlinks]=addToNeighborhood(pointID,Neighborhoods,Length,remainingQ,Data,count);
+  usedindexes_size=usedindexes_size+1;
+  usedindexes(1,usedindexes_size)=pointID;
+  
+  
+  if count>=k
+    flag=1;
+  end
+ end
+display(Neighborhoods);
+[Neighborhoods Length count usedindexes ]= consolidate(Data,usedindexes,usedindexes_size,remainingQ,Neighborhoods,Length,count);
+
+display(Neighborhoods);
+PCKmeans( Neighborhoods ,Length,k,count,Data,usedindexes , mustlinks, cantlinks);
+
+
+end

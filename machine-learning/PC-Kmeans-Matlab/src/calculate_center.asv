@@ -1,0 +1,18 @@
+function [ center ] = calculate_center( Neighborhoods,i,length,Data )
+%UNTITLED2 Summary of this function goes here
+%   Detailed explanation goes here
+colomns=size(Data,2);
+center=0;
+for j=1:length(1,i)
+    center=Neighborhoods(i,j)+center;
+end
+
+center=center/length(1,i);
+
+
+
+
+
+
+end
+

@@ -1,0 +1,21 @@
+function [w_ml ] = constraint_ml(ML,i,clusters,h)
+%UNTITLED5 Summary of this function goes here
+%   Detailed explanation goes here
+w_ml=0;
+for j=1:size(ML,1)
+    if ML(j,1)==Data(i,1)
+        if clusters(i,2)~=clusters(ML(j,2),2)
+            w_ml=w_ml+1
+        end
+    end
+    if ML(j,2)==Data(i,1)
+        if clusters(i,2)~=clusters(ML(j,1),2)
+            w_ml=w_ml+1
+            
+    end
+end
+
+
+
+end
+

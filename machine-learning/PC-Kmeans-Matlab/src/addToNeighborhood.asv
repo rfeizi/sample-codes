@@ -1,0 +1,118 @@
+function [count Neighborhoods  remainingQ  Lenghth]=addToNeighborhood(index,Neighborhoods, Lenghth,remainingQ,Data,count)
+
+checkingCL=zeros(1,count);
+checkingML=zeros(1,count);
+flag=1;
+MLflag=0;
+label=size(Data,2);
+
+mustlink=zeros(size(Data,1),size(Data,1));
+cantlink=zeros(size(Data,1),size(Data,1));
+
+
+for i=1:count
+    found=0;
+    if(cantlink(
+        if Data(index,label)~=Data(Neighborhoods(i,1),label)
+            display(Data(index,label));
+            display(Data(Neighborhoods(i,1),label));
+            checkingCL(1,i)=1;% if can not link to neighborhood i
+            remainingQ=remainingQ-1;
+            
+              for k=1:Lenghth(1,i)
+                 cantlinks_size=cantlinks_size+1;
+                 cantlinks(cantlinks_size,:)=[Neighborhoods(i,k),index];
+                 cantlinks_size=cantlinks_size+1;
+                 cantlinks(cantlinks_size,:)=[index,Neighborhoods(i,k)];
+              end
+        end
+    else
+           checkingCL(1,i)=1;% if can not link to neighborhood i
+    end
+end
+
+
+for i=1:count
+    if checkingCL(1,i)==0
+        flag=0;
+    end
+      
+end
+
+
+if flag==1 %start a new neighborhood :) because we found a CL
+    
+     count=count+1;
+     Neighborhoods(count,1)=index;
+     Lenghth(1,count)= Lenghth(1,count)+1;
+   
+
+elseif flag==0 % add to one of the previous neighborhoods
+    
+    
+    for i=1:count
+        found=0;
+        for j=1:cantlinks_size
+            if(cantlinks(j,1)==index && cantlinks(j,2)==i)
+               found=1;
+               break;
+            end
+        end
+        
+        if(found==0)
+          if Data(index,label)==Data(Neighborhoods(i,1),label)
+             checkingML(1,i)=1;% if must link to neighborhood i
+             remainingQ=remainingQ-1;
+             
+              for k=1:Lenghth(1,i)
+                 mustlinks_size=mustlinks_size+1;
+                 mustlinks(mustlinks_size,:)=[Neighborhoods(i,k),index];
+                 mustlinks_size=mustlinks_size+1;
+                 mustlinks(mustlinks_size,:)=[index,Neighborhoods(i,k)];
+              end
+              
+             break;
+         end
+        else
+             checkingML(1,i)=1;% if must link to neighborhood i
+        end
+    end
+    
+    
+    for i=1:count
+        if checkingML(1,i)==1
+            MLflag=1;
+            temp_index=i;
+            break;
+        end
+    end
+    
+  if MLflag==1 %
+     Lenghth(1,temp_index)= Lenghth(1,temp_index)+1;
+     Neighborhoods(temp_index,Lenghth(1,temp_index))=index;  
+  end  
+    
+end
+    
+    
+end
+   
+    
+    
+    
+    
+     
+    
+  
+
+
+
+
+
+    
+
+
+
+
+
+

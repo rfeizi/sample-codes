@@ -1,0 +1,112 @@
+function [ accuracy ] = Kmeans( k )
+%Data=read_data_iris();
+%Data=read_data_glass();
+Data=read_data_yeast();
+
+
+
+colomns=size(Data,2);
+centroids=zeros(k,colomns-2);
+  
+temp_Data=Data(:,(2:(colomns-1)));
+ for i=1:k
+     randomPointID = randsample(size(Data,1),1) ;
+      randomPoint=temp_Data(randomPointID,:);
+     centroids(i,:)=randomPoint;
+ end
+
+ids=zeros(size(Data,1),1);
+
+
+    for i=1:size(Data,1)
+            ids(i,1)=i;
+
+    end
+
+temp=ones(size(Data,1),1);
+
+clusters=[ids,temp];
+
+temp1=zeros(size(Data,1),1);
+newClusters=[ids,temp1];
+changed=1;
+
+   draw_clusters(Data,clusters,centroids,k,1,'kmeans.gif');
+       
+
+            ccount=0;
+while changed==1
+ 
+       ccount=ccount+1;
+        changed=0;
+    for i=1:size(Data,1)
+    min=10000000000;
+    for h=1:k
+        
+        distv=Data(i,2:colomns-1)-centroids(h,:);
+		distance=distv*distv';
+
+       if (distance)<min
+            newClusters(i,2)=h;
+            min=distance;
+       end
+      
+       
+    end
+        if(clusters(i,2)~=newClusters(i,2))
+           changed=1;
+       end
+  
+    
+    end
+    
+      clusters(:,:)=newClusters(:,:);
+    
+     
+
+clustercount=zeros(k,1);
+centroids=zeros(k,colomns-2);
+for i=1:size(Data,1)
+   centroids(clusters(i,2),:)=centroids(clusters(i,2),:)+Data(i,2:colomns-1);
+   clustercount(clusters(i,2),1)=clustercount(clusters(i,2),1)+1;
+end
+
+for h=1:k
+    centroids(h,:)=centroids(h,:)/clustercount(h,1);
+end
+
+
+draw_clusters(Data,clusters,centroids,k,0,'kmeans.gif');
+
+
+end
+
+
+
+display(ccount);
+
+    display(clusters);
+
+     collisions=zeros(k,k+1);
+ for i=1:size(Data,1)
+     collisions(clusters(i,2),Data(i,end)+1)=collisions(clusters(i,2),Data(i,end)+1)+1;
+ end
+ 
+ sum_col=0;
+ for i=1:k
+     max=0;
+     for j=1:k+1
+         sum_col=sum_col+collisions(i,j);
+         if(collisions(i,j)>max)
+             max=collisions(i,j);
+         end
+     end
+     sum_col=sum_col-max;
+ end
+ 
+accuracy=(size(Data,1)-sum_col)/size(Data,1);
+ 
+ display(accuracy);
+ 
+ 
+end
