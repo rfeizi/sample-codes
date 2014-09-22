@@ -1,0 +1,5 @@
+-> Error: cannot convert from 'int' to 'char' (at line: 14)
+-> Error: cannot convert from 'char' to 'float' (at line: 16)
+-> Error: cannot convert from 'float' to 'char' (at line: 18)
+-> Error: cannot convert from 'int' to 'char' (at line: 26)
+-> Error: Global Scope cannot return values (at line: 28)
