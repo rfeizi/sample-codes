@@ -1,0 +1,82 @@
+.tab
+{
+	float:left;
+	position:absolute;
+	top: 30px; 
+	height: 30px; 
+	width: 80px;
+	border: solid blue 1px;
+	background: #99CCFF;
+	 -
+
+
+}
+
+.adminTab
+{
+	position:absolute;
+	top:132px;
+	width:900px;
+	height:500px;
+	border: solid black 1px;
+	 
+
+}
+
+.empty
+{
+	position:absolute;
+	//top:132px;
+	width:100px;
+	height:100px;
+	
+}
+
+
+
+
+.tags
+{
+border:solid #99CCFF .5px;
+position:absolute;
+width:180px;
+height:200px;
+background-color: #99CCFF;
+color: white;
+float: left;
+right: 40px;
+top:50px;
+overflow:scroll;
+
+}
+
+.hole
+{
+	position:absolute;
+	width:900px;
+	top:60px;
+	border:solid #99CCFF 2px;
+}
+
+
+.slot
+{
+	border:solid #99CCFF .5px;
+	position:absolute;
+	width:180px;
+	height:100px;
+	float: left;
+	right: 40px;
+	top:500px;
+	
+}
+
+.randomarticle
+{
+	position:absolute;
+	border:solid black;
+	top:20px;
+	right:30px;
+	width:120px;
+	
+}
